@@ -4,7 +4,7 @@ import java.util.Vector;
 
 public class ChainageAvant {
 
-	private Vector<entite> BF  ;
+	private Vector<Fait> BF  ;
 	private Vector<Regle>  BR ;
 	private entite BUT ;
 	private entite RegleDeclenche ;
@@ -12,15 +12,17 @@ public class ChainageAvant {
 	Vector<Integer> indexDeclenchable = new Vector<>();
 	private Vector<Regle> Declenched = new Vector<Regle>()  ;
 	private String method ;
+	private Boolean butAtteind = false;
+    private Boolean baseSature = false;
 	
 	
 	
 	
-	public Vector<entite> getBF() {
+	public Vector<Fait> getBF() {
 		return BF;
 	}
 
-	public void setBF(Vector<entite> bF) {
+	public void setBF(Vector<Fait> bF) {
 		BF = bF;
 	}
 
@@ -53,9 +55,12 @@ public class ChainageAvant {
 		BFGenerator gen = new BFGenerator() ;
 		gen.readFromFile("C:\\Users\\Abassi\\Desktop\\IA.txt");
 		this.setBF(gen.getBfait());
-		
+		System.out.println("Longueur BF : "+BF.size());
 		BR = gen.getBregle() ;
+		System.out.println("Longueur BR : "+BR.size());
 		BUT = gen.getBut() ;
+		System.out.println("But is : "+BUT.getNom());
+		
 			
 	}
 	
@@ -63,10 +68,7 @@ public class ChainageAvant {
 	public boolean checkBut() {
 		boolean trouve = false ;
 		for(int i=0 ; i < BF.size(); i++) {
-			//System.out.println("Test BF n "+i);
-			//System.out.println("le But " +BUT.getNom()+ " "+BUT.getValeur() );
-			//System.out.println("Val Tester "+BF.get(i).getNom()+ " "+ BF.get(i).getValeur() );
-			//System.out.println("Test :" +BUT.egal(BF.get(i)));
+	
 			if(BUT.egal(BF.get(i))){
 				trouve = true ;
 			}
@@ -94,58 +96,147 @@ public class ChainageAvant {
 	}
 	
 	//Cas de premiere regle declenchable
-	public Regle choixRegle(Vector<Regle> R , String method){
-		
-		  if(method.equalsIgnoreCase(method)){
-			  Regle  k = R.get(0);
-			  return k ;
-		  }
-		if(method.equalsIgnoreCase(method)) {
-		Regle k  ; 
-		k = R.get(0);
-		int indice = indexDeclenchable.get(0) ;
-		regleAdeclencher = indice ;		
-		indexDeclenchable.removeAllElements();
-		return k ;
-		}
-		
-		else return null ;
+	public Regle choixRegle(Vector<Regle> declanchable ,String methode)
+    {
+       
+        if(!baseSature)
+        {
+           
+            if(methode.equals("0"))
+        {
+            
+            return declanchable.get(0);
+            
+        }else if(methode.equals("1"))
+                {
+                    int numRegleDeclanchable=0;
+                    int nbrPremisses=0;
+                    for(int i=0;i<declanchable.size();i++)
+                    {
+                        if(declanchable.get(i).getPremisseList().size()>nbrPremisses)
+                        {
+                            numRegleDeclanchable=i;
+                            nbrPremisses=declanchable.get(i).getPremisseList().size();
+                        }
+                    }
+                    
+                    return declanchable.get(numRegleDeclanchable);
+                }
+        
+         
+        }
+        return null;
+    }
+	
+	
+	public Vector<Regle> filtrage(Vector<Regle> Bregles)
+	{
+	    Vector<Regle> declanchable = new Vector<Regle>();
+	    for(int i=0; i<Bregles.size();i++)
+	    {
+	        if(regleDeclenchable(Bregles.elementAt(i)))
+	            declanchable.add(Bregles.elementAt(i));
+	    }
+	    if (declanchable.size()==0)
+	    {
+	         System.out.println("la base des faits est saturée ");
+	         baseSature=true;
+	   // System.exit(-1);mdif pour faire un chainage mixte
+	    }
+	       
+	    return declanchable;
 	}
 	
 	
-	public void ChainageAvantAvecConflit() {
-		boolean butAtteint= false ;  
-		       System.out.println("Donner Le Type de resolution de conflit");
-		       Scanner sc = new Scanner(System.in);
-		       method = sc.nextLine() ;
-		       
-		
-		   while(!butAtteint && !BF.isEmpty()) {
-			   Vector<Regle>  rg =  this.choixRegleDeclenchable() ;
-				if(rg.isEmpty()) {
-					System.out.println();
-				}
-			  for(int k = 0 ; k < indexDeclenchable.size();k++){
-		        	System.out.println("Regle Declenchable "+k );
-		        }        
-		        System.out.println("----------------------------");
-			        Regle r = this.choixRegle(rg, method);   
-			     for(int i = 0 ; i< r.getButList().size();i++ ){
-			    	 BF.add(r.getButList().get(i)) ;
-			     }
-			   //  System.out.println("Regle Declenche"+ regleAdeclencher);
-			     BR.remove(regleAdeclencher);
-			     if(this.checkBut()) {
-			    	 butAtteint = true ;
-			    	 System.out.println("But Atteint");
-			     }   
-			   indexDeclenchable.removeAllElements();
-			   
-			     
-		   }
-		
-		
+	public boolean notExistDansBfaits(entite conclusion)
+	{
+	    entite e = new entite(conclusion.getNom(),!conclusion.getValeur());
+	    if(BF.contains(e))
+	        return true;
+	    return false;
 	}
+	
+	
+	
+	public void declancherRegle(Regle regle)
+	{
+	    if(regle!=null)
+	    {
+	        for(int i=0;i<regle.getConclusion().size();i++)
+	    {
+	        if(!notExistDansBfaits(regle.getButList().get(i)))
+	        {
+	            BF.add(new Fait(regle.getConclusion().elementAt(i).getNom(), regle.getConclusion().elementAt(i).getValeur(),regle.getNum()));
+	            System.out.println("fait ajouté a la base des faits: "+new Fait(regle.getConclusion().elementAt(i).getNom(),
+	                    regle.getConclusion().elementAt(i).getValeur(),regle.getNum()).toString());
+	        }
+	        
+	        
+	        else 
+	        {
+	            System.out.println("erreur:X et !X ne peuvent pas etre dans la meme base de faits");
+	        System.exit(-1);
+	        }
+	    }
+	    BR.remove(regle);
+	    
+	    
+	    }
+	    
+	}
+	
+	
+	public void chainageAvantAvecConflit(String methode)
+    {
+        
+        Vector<Regle> reglesDeclanchables = new Vector<Regle>();
+       
+        Regle RegleChoisi;
+        if (BUT==null)
+        {  
+            while(BR.size()>0&& !baseSature)
+            {
+                
+                reglesDeclanchables=filtrage(BR);
+                RegleChoisi=choixRegle(reglesDeclanchables,methode);
+                System.out.println("la regle a declancher est: "+RegleChoisi.toString());
+                declancherRegle(RegleChoisi);
+            }
+        }else 
+            
+        {
+            while(BR.size()>0 && !butAtteind && !baseSature)
+               {
+                if(checkBut())
+                {      System.out.println("Here");
+                    System.out.println("le but "+BUT.toString()+" appartient a la base des faits");
+                    butAtteind=true;
+                    
+                }
+                reglesDeclanchables=filtrage(BR);
+                if(!baseSature)
+                {
+                    RegleChoisi=choixRegle(reglesDeclanchables,methode);
+             
+                        System.out.println("la regle a declancher est: "+RegleChoisi.toString());
+                       declancherRegle(RegleChoisi);
+                       
+                       
+                       if(checkBut())
+                       {
+                           System.out.println("le but est atteind");
+                           butAtteind=true;
+                       }
+                }
+                
+
+                
+              
+            }
+        }
+        
+        
+    }
 	
 	
 	//check Fait in Base Fait
@@ -188,7 +279,7 @@ public class ChainageAvant {
 	    				   index = offset +i ;
 	    			   }
 	    			   System.out.println("Regle Declenche : "+ index);
-	    			   BF.add(BR.get(i).getButList().get(j)) ;
+	    			  // BF.add(BR.get(i).getButList().get(j)) ;
 	    		   }
 	    		BR.remove(i) ; 
 	    		offset++ ; 

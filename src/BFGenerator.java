@@ -10,24 +10,14 @@ import java.util.Vector;
 public class BFGenerator {
 	
 	private Vector<Regle> Bregle = new Vector<Regle>()  ;
-	private Vector<entite> Bfait = new Vector<entite>() ; 
+	private Vector<Fait> Bfait = new Vector<Fait>() ; 
 	private entite butGen ;
-	
-	
-	
-	
-	
 	
 	
 	
 	public Vector<Regle> getBregle() {
 		return Bregle;
 	}
-
-
-
-
-
 
 
 
@@ -42,7 +32,7 @@ public class BFGenerator {
 
 
 
-	public Vector<entite> getBfait() {
+	public Vector<Fait> getBfait() {
 		return Bfait;
 	}
 
@@ -53,7 +43,7 @@ public class BFGenerator {
 
 
 
-	public void setBfait(Vector<entite> bfait) {
+	public void setBfait(Vector<Fait> bfait) {
 		Bfait = bfait;
 	}
 
@@ -110,7 +100,7 @@ public class BFGenerator {
 					isregle = true ;
 					isfait = false ; 
 					isPremisse = true ;
-					//System.out.println("Ready To read Regle");
+					System.out.println("Ready To read Regle");
 					
 				}
 				
@@ -137,7 +127,9 @@ public class BFGenerator {
 					Vector<entite> premisses = new Vector<entite>(); 
 					Vector<entite> buts = new Vector<entite>();
 					String[] str = ligne.split(" ");
-					for(int i = 0; i< str.length ; i++) {
+					String numString = str[0] ;
+					int numRegle = Integer.parseInt(numString);
+					for(int i = 1; i< str.length ; i++) {
 				     if(str[i].equalsIgnoreCase("Not")) {
 				    	 isfalse= true ;
 				    	 //System.out.println("Reading False Premisses");
@@ -183,13 +175,13 @@ public class BFGenerator {
 					
 					}
 					
-					Regle r = new Regle(premisses , buts); 
+					Regle r = new Regle(numRegle,premisses , buts); 
 					Bregle.add(r) ;
 					
 					}
 					
 					if(isfait){
-						entite fait ;
+						Fait fait ;
 						String[] str = ligne.split(" ");
 						boolean isfalseFait = false ;
 						for(int i=0 ; i< str.length ; i++) {
@@ -198,13 +190,13 @@ public class BFGenerator {
 							  isfalseFait = true ;	
 							}
 							else if (isfait && isfalseFait) {
-								 fait = new entite(str[i],false);
+								 fait = new Fait(str[i],false ,-1);
 								 isfalseFait = false ;
 								 Bfait.add(fait);
 								 //System.out.println("Added false Fait");
 							}
 							else if (isfait && !isfalseFait){
-								fait = new entite(str[i], true) ;
+								fait = new Fait(str[i], true, -1) ;
 								Bfait.add(fait);
 								 //System.out.println("Added true Fait");
 								

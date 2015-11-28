@@ -28,12 +28,41 @@ public class Regle {
        conclusion = new Vector<entite>() ;
     }
     
-    public Regle(Vector<entite> premisse , Vector<entite> conclusion){
-        this.premisse = premisse ;
+    public Regle(int num ,Vector<entite> premisse , Vector<entite> conclusion){
+        this.num = num ; 
+    	this.premisse = premisse ;
         this.conclusion = conclusion ;
      }
     
-    //Ajouter une Regle 
+    /**
+	 * @return the premisse
+	 */
+	public Vector<entite> getPremisse() {
+		return premisse;
+	}
+
+	/**
+	 * @param premisse the premisse to set
+	 */
+	public void setPremisse(Vector<entite> premisse) {
+		this.premisse = premisse;
+	}
+
+	/**
+	 * @return the conclusion
+	 */
+	public Vector<entite> getConclusion() {
+		return conclusion;
+	}
+
+	/**
+	 * @param conclusion the conclusion to set
+	 */
+	public void setConclusion(Vector<entite> conclusion) {
+		this.conclusion = conclusion;
+	}
+
+	//Ajouter une Regle 
     public void ajouterPremisse(entite premisse){
         this.premisse.add(premisse);
     }
@@ -66,6 +95,15 @@ public class Regle {
         this.AjouterConclusion(c.get(i));
         }
     }
+    
+    
+    @Override
+    public String toString() {
+        return "Regle{" + "num=" + num + ", premisses=" + premisse + ", conclusions=" + conclusion + '}';
+    }
+    
+    
+    
    
 }
 

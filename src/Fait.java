@@ -19,6 +19,19 @@ public class Fait extends entite {
 	public void setRegleDeclencheur(int regleDeclencheur) {
 		RegleDeclencheur = regleDeclencheur;
 	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Fait [RegleDeclencheur=" + RegleDeclencheur + ", getNom()="
+				+ getNom() + ", getValeur()=" + getValeur() + "]";
+	}
+	
+	
+	
 	
 	
 
