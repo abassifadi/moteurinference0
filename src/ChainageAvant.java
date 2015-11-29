@@ -50,6 +50,38 @@ public class ChainageAvant {
 		RegleDeclenche = regleDeclenche;
 	}
 
+	
+	
+	
+	
+	/**
+	 * @return the butAtteind
+	 */
+	public Boolean getButAtteind() {
+		return butAtteind;
+	}
+
+	/**
+	 * @param butAtteind the butAtteind to set
+	 */
+	public void setButAtteind(Boolean butAtteind) {
+		this.butAtteind = butAtteind;
+	}
+
+	/**
+	 * @return the baseSature
+	 */
+	public Boolean getBaseSature() {
+		return baseSature;
+	}
+
+	/**
+	 * @param baseSature the baseSature to set
+	 */
+	public void setBaseSature(Boolean baseSature) {
+		this.baseSature = baseSature;
+	}
+
 	//Constructing the  Base of Chaining 
 	public ChainageAvant()  {
 		BFGenerator gen = new BFGenerator() ;
@@ -218,7 +250,7 @@ public class ChainageAvant {
                 {
                     RegleChoisi=choixRegle(reglesDeclanchables,methode);
              
-                        System.out.println("la regle a declancher est: "+RegleChoisi.toString());
+                        System.out.println("la regle a declancher est: "+RegleChoisi.getNum());
                        declancherRegle(RegleChoisi);
                        
                        
