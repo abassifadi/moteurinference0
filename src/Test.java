@@ -9,12 +9,18 @@ public class Test {
 	      
 	      
 	         
-		ChainageAvant chainageAvant = new ChainageAvant();
-        chainageAvant.chainageAvantAvecConflit("1");
+		//ChainageAvant chainageAvant = new ChainageAvant();
+        //chainageAvant.chainageAvantAvecConflit("1");
+		
+		  Chainage n = new Chainage() ;
+		  
+		  //ChainageMixte ch_m=new ChainageMixte();
+	        //ch_m.chainageMixte();
+	        
+	      //ChainageAvant a = new ChainageAvant() ;
+	      //a.chainageAvantAvecConflit("0");
 	     
-	      
-	        
-	        
+		  
 	        
 	       
 		

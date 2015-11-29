@@ -1,5 +1,8 @@
+import java.awt.Component;
 import java.util.Scanner;
 import java.util.Vector;
+
+import javax.swing.JLabel;
 
 
 public class ChainageAvant {
@@ -14,6 +17,35 @@ public class ChainageAvant {
 	private String method ;
 	private Boolean butAtteind = false;
     private Boolean baseSature = false;
+    private int methodRegle ;  //Choix De Regle 
+    private Chainage ch ;
+	
+    
+    
+	
+	/**
+	 * @return the ch
+	 */
+	public Chainage getCh() {
+		return ch;
+	}
+
+
+
+
+	/**
+	 * @param ch the ch to set
+	 */
+	public void setCh(Chainage ch) {
+		this.ch = ch;
+	}
+
+
+
+
+	public void NotifyUser(String s) {
+		this.ch.getList().append(s);;
+	}
 	
 	
 	
@@ -83,17 +115,28 @@ public class ChainageAvant {
 	}
 
 	//Constructing the  Base of Chaining 
+	public ChainageAvant(Chainage ch)  {
+		BFGenerator gen = new BFGenerator() ;
+		gen.readFromFile("C:\\Users\\Abassi\\Desktop\\IA.txt");
+		this.setBF(gen.getBfait());
+		this.ch = ch ;
+		BR = gen.getBregle() ;
+		BUT = gen.getBut() ;
+	    this.NotifyUser("9a7ba");
+	    //UserInteraction i = new UserInteraction() ;
+	   // i.ChoixRegleChainageAvant();
+				
+	}
 	public ChainageAvant()  {
 		BFGenerator gen = new BFGenerator() ;
 		gen.readFromFile("C:\\Users\\Abassi\\Desktop\\IA.txt");
 		this.setBF(gen.getBfait());
-		System.out.println("Longueur BF : "+BF.size());
 		BR = gen.getBregle() ;
-		System.out.println("Longueur BR : "+BR.size());
 		BUT = gen.getBut() ;
-		System.out.println("But is : "+BUT.getNom());
-		
-			
+	    this.NotifyUser("9a7ba");
+	    //UserInteraction i = new UserInteraction() ;
+	   // i.ChoixRegleChainageAvant();
+				
 	}
 	
 	//check if but exist dans BF 
