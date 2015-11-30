@@ -15,37 +15,49 @@ public class ChainageMixte {
 	
 	public ChainageMixte() {
 		 
-		 bf.readFromFile("C:\\Users\\Abassi\\Desktop\\IA.txt");
+		 bf.readFromFile("C:\\Users\\Abassi\\Desktop\\IB.txt");
 	}
 	
+      
     
-    public Boolean terminal(entite fait)
-    {
-        gauche = new Vector<entite>();
-        for(int i=0;i<bf.getBregle().size();i++)
-            gauche.addAll(bf.getBregle().get(i).getPremisse());
-        if(gauche.contains(fait) || bf.getBfait().contains(fait))
-            return false;
-        return true;
-        
+    public boolean contenir(Vector<entite> v , entite fait) {
+    	boolean result=false ;
+    	for(int i=0 ; i< v.size();i++) {
+    		if(v.elementAt(i).getNom().equalsIgnoreCase(fait.getNom()) ){
+    			result = true ;
+    		}
+    	}
+    	return result ;
     }
     
     
-    
-    
+    public boolean contenirFait(Vector<Fait> v , entite fait) {
+    	boolean result=false ;
+    	for(int i=0 ; i< v.size();i++) {
+    		if(v.elementAt(i).getNom().equalsIgnoreCase(fait.getNom()) ){
+    			result = true ;
+    		}
+    	}
+    	return result ;
+    }
     
    public  Boolean observable(entite fait)
    {
         Vector<entite> conclusions = new Vector<entite>();
         for(int i=0;i<bf.getBregle().size();i++)
             conclusions.addAll(bf.getBregle().get(i).getConclusion());
-        if(conclusions.contains(fait) || bf.getBfait().contains(fait))
+        System.out.println("--------Observation------");
+        System.out.println("L Conclusion : "+conclusions.size());
+        System.out.println("-------------------");
+        
+        if(this.contenir(conclusions, fait) ||  this.contenirFait(bf.getBfait(), fait))
         {
             System.out.println(fait.getNom()+" non observable");
             return false;
         }
+        else {
             System.out.println(fait.getNom()+"  observable");
-        return true;
+        return true; }
    }
        
  
@@ -55,7 +67,7 @@ public class ChainageMixte {
    {
             entite obs=null;
        ChainageAvant chainageAvant = new ChainageAvant();
-        chainageAvant.chainageAvantAvecConflit("0");
+        chainageAvant.chainageAvantAvecConflit("Prem");
         
         if(!chainageAvant.getButAtteind()&& chainageAvant.getBR().size()>0 && chainageAvant.getBUT()!=null)
         {
@@ -73,10 +85,10 @@ public class ChainageMixte {
                    {
                        observable++;
                         obs = chainageAvant.getBR().get(i).getPremisse().get(j);
-                       
+                        System.out.println("Nombre Observable : "+observable); 
                    }
                 }
-                if(observable==1)
+                if(observable>=1)
                 {
                       System.out.println("la regle a declancher est "+chainageAvant.getBR().get(i).getNum() );
                        int reponse ; 
@@ -91,8 +103,9 @@ public class ChainageMixte {
                    if(reponse==1)
                    {
                        chainageAvant.getBF().add(new Fait(obs.getNom(),obs.getValeur(),-1));
+                       System.out.println("Fait Ajoute "+ obs.getNom());
                        chainageAvant.setBaseSature(false);
-                       chainageAvant.chainageAvantAvecConflit("0");
+                       chainageAvant.chainageAvantAvecConflit("Prem");
                        
                    }
                    

@@ -33,9 +33,10 @@ public class Chainage implements ActionListener {
 	private JButton btnFait ;
 	String regleString ;
 	String faitString ;
+	String butString ;
 	private JButton btnCommencer ;
 	JTextArea list ;
-	
+	String methode ; 
 	
 	
 	
@@ -82,7 +83,9 @@ public class Chainage implements ActionListener {
 	/**
 	 * Create the application.
 	 */
-	public Chainage() {
+	public Chainage(String methode) {
+		this.methode = methode ;
+		System.out.println("Method Invoked is "+methode);
 		initialize();
 	}
 
@@ -135,23 +138,23 @@ public class Chainage implements ActionListener {
 		frame.getContentPane().add(lblBut);
 		
 		btnRegle = new JButton("Vallider");
-		btnRegle.setBackground(Color.RED);
-		btnRegle.setForeground(Color.RED);
+		btnRegle.setBackground(SystemColor.textHighlight);
+		btnRegle.setForeground(SystemColor.window);
 		btnRegle.setBounds(357, 286, 89, 39);
 		btnRegle.addActionListener(this);
 		frame.getContentPane().add(btnRegle);
 		
 		
 		btnFait = new JButton("Valider");
-		btnFait.setForeground(Color.ORANGE);
-		btnFait.setBackground(Color.ORANGE);
+		btnFait.setForeground(SystemColor.window);
+		btnFait.setBackground(SystemColor.textHighlight);
 		btnFait.setBounds(620, 286, 106, 39);
 		btnFait.addActionListener(this);
 		frame.getContentPane().add(btnFait);
 		
 		btnCommencer = new JButton("Commencer");
 		btnCommencer.setBackground(Color.RED);
-		btnCommencer.setForeground(Color.RED);
+		btnCommencer.setForeground(SystemColor.window);
 		btnCommencer.setBounds(744, 286, 118, 39);
 		btnCommencer.disable();
 		btnCommencer.addActionListener(this);
@@ -169,23 +172,28 @@ public class Chainage implements ActionListener {
 		}
 		
 		if(e.getSource()==btnFait) {
-			System.out.println("HERE");
+
 			faitString = fait.getText().toString() ;
+			System.out.println("Fait String is : "+faitString);
 			fait.disable(); 
 			btnCommencer.enable();
 			btnFait.disable();
-			us.whiteInFile("REGLE \r\n"+regleString+ "\r\nFAIT \r\n"+ faitString);
-		    
 			
-		  // ChainageAvant ch = new ChainageAvant() ;
-		   //ch.chainageAvantAvecConflit("0");
+		    
 		}
 		
 		if(e.getSource()==btnCommencer) {
-			System.out.println("AKA");
-			
-		 ChainageAvant ch = new ChainageAvant(Chainage.this) ;
-		  ch.chainageAvantAvecConflit("0");
+			butString = textField.getText();
+			if(butString.equalsIgnoreCase("")){
+			us.whiteInFile("REGLE\r\n"+regleString+ "\r\nFAIT\r\n"+ faitString);
+			System.out.println("REGLE\r\n"+regleString+ "\r\nFAIT\r\n"+ faitString);
+			}
+			else {
+				us.whiteInFile("REGLE\r\n"+regleString+ "\r\nFAIT\r\n"+ faitString+ "\r\nBUT\r\n"+butString);
+				System.out.println("REGLE\r\n"+regleString+ "\r\nFAIT\r\n"+ faitString+ "\r\nBUT\r\n"+butString);
+			}
+		 ChainageAvant ch = new ChainageAvant(this) ;
+		  ch.chainageAvantAvecConflit(methode);
 		}
 		
 		

@@ -8,21 +8,22 @@ public class Test {
 		
 	      
 	      
-	         
+	        
 		//ChainageAvant chainageAvant = new ChainageAvant();
         //chainageAvant.chainageAvantAvecConflit("1");
 		
-		  Chainage n = new Chainage() ;
+		  //Chainage n = new Chainage("0") ;
 		  
-		  //ChainageMixte ch_m=new ChainageMixte();
-	        //ch_m.chainageMixte();
+		 ChainageMixte ch_m=new ChainageMixte();
+	       
+		  ch_m.chainageMixte();
 	        
 	      //ChainageAvant a = new ChainageAvant() ;
-	      //a.chainageAvantAvecConflit("0");
+	     // a.chainageAvantAvecConflit("0");
 	     
-		  
+		//Welcome wc = new Welcome() ;
 	        
-	       
+	        
 		
 
 	}

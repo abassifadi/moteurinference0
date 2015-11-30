@@ -19,7 +19,7 @@ public class ChainageAvant {
     private Boolean baseSature = false;
     private int methodRegle ;  //Choix De Regle 
     private Chainage ch ;
-	
+    private boolean withInterface= false ;	
     
     
 	
@@ -44,9 +44,10 @@ public class ChainageAvant {
 
 
 	public void NotifyUser(String s) {
-		this.ch.getList().append(s);;
+		this.ch.getList().append(s);
+		System.out.println("Notified....");
 	}
-	
+	 
 	
 	
 	
@@ -117,23 +118,24 @@ public class ChainageAvant {
 	//Constructing the  Base of Chaining 
 	public ChainageAvant(Chainage ch)  {
 		BFGenerator gen = new BFGenerator() ;
-		gen.readFromFile("C:\\Users\\Abassi\\Desktop\\IA.txt");
+		gen.readFromFile("C:\\Users\\Abassi\\Desktop\\IB.txt");
 		this.setBF(gen.getBfait());
 		this.ch = ch ;
+		this.withInterface = true ;
 		BR = gen.getBregle() ;
 		BUT = gen.getBut() ;
-	    this.NotifyUser("9a7ba");
-	    //UserInteraction i = new UserInteraction() ;
-	   // i.ChoixRegleChainageAvant();
-				
+	    this.NotifyUser("Started....");
+	    System.out.println("Size of BR Before :" + BR.size());
+	  		
 	}
 	public ChainageAvant()  {
 		BFGenerator gen = new BFGenerator() ;
-		gen.readFromFile("C:\\Users\\Abassi\\Desktop\\IA.txt");
+		gen.readFromFile("C:\\Users\\Abassi\\Desktop\\IB.txt");
 		this.setBF(gen.getBfait());
 		BR = gen.getBregle() ;
 		BUT = gen.getBut() ;
-	    this.NotifyUser("9a7ba");
+	
+	    
 	    //UserInteraction i = new UserInteraction() ;
 	   // i.ChoixRegleChainageAvant();
 				
@@ -177,13 +179,15 @@ public class ChainageAvant {
         if(!baseSature)
         {
            
-            if(methode.equals("0"))
+            if(methode.equals("Prem"))
         {
-            
+            System.out.println("Premiere Regle Choisie");
             return declanchable.get(0);
             
-        }else if(methode.equals("1"))
-                {
+        }else if(methode.equals("Plus"))
+                {    
+        	
+        	 System.out.println("Plus de Premisse Regle Choisie");
                     int numRegleDeclanchable=0;
                     int nbrPremisses=0;
                     for(int i=0;i<declanchable.size();i++)
@@ -216,7 +220,9 @@ public class ChainageAvant {
 	    {
 	         System.out.println("la base des faits est saturée ");
 	         baseSature=true;
-	   // System.exit(-1);mdif pour faire un chainage mixte
+	         if(this.withInterface){
+	         this.NotifyUser("Base des Fait Saturee\r\n"); }
+
 	    }
 	       
 	    return declanchable;
@@ -224,11 +230,15 @@ public class ChainageAvant {
 	
 	
 	public boolean notExistDansBfaits(entite conclusion)
-	{
+	{   boolean exist = false ;
 	    entite e = new entite(conclusion.getNom(),!conclusion.getValeur());
-	    if(BF.contains(e))
-	        return true;
-	    return false;
+	    for(int i=0 ; i< BF.size();i++) {
+	    	if(BF.elementAt(i).getNom().equalsIgnoreCase(conclusion.getNom())){
+	    		exist = true ;
+	    	}
+	    }
+	       
+	    return exist;
 	}
 	
 	
@@ -244,13 +254,15 @@ public class ChainageAvant {
 	            BF.add(new Fait(regle.getConclusion().elementAt(i).getNom(), regle.getConclusion().elementAt(i).getValeur(),regle.getNum()));
 	            System.out.println("fait ajouté a la base des faits: "+new Fait(regle.getConclusion().elementAt(i).getNom(),
 	                    regle.getConclusion().elementAt(i).getValeur(),regle.getNum()).toString());
+	           if(this.withInterface){
+	            this.NotifyUser("Fait Ajoute a la Base Des Fait :  "+regle.getConclusion().elementAt(i).getNom()+"\r\n"); }
 	        }
 	        
 	        
 	        else 
 	        {
-	            System.out.println("erreur:X et !X ne peuvent pas etre dans la meme base de faits");
-	        System.exit(-1);
+	            System.out.println("Element Existant");
+	        //System.exit(-1);
 	        }
 	    }
 	    BR.remove(regle);
@@ -263,18 +275,26 @@ public class ChainageAvant {
 	
 	public void chainageAvantAvecConflit(String methode)
     {
-        
+		if(this.withInterface){
+		this.NotifyUser("\r\nChaiange Avenc Conflit\r\n"); }
+		System.out.println("Started Chaiange Avenc Conflit");
         Vector<Regle> reglesDeclanchables = new Vector<Regle>();
        
         Regle RegleChoisi;
         if (BUT==null)
-        {  
+        {   if(this.withInterface){  
+        	this.NotifyUser("\r\nLe But Est Null"); }
+        if(this.withInterface){
+        this.NotifyUser("\r\nSaturation de la Base Des Fait\r\n"); }
+        System.out.println("Taille de BR : "+BR.size());   
             while(BR.size()>0&& !baseSature)
             {
                 
                 reglesDeclanchables=filtrage(BR);
                 RegleChoisi=choixRegle(reglesDeclanchables,methode);
-                System.out.println("la regle a declancher est: "+RegleChoisi.toString());
+               // System.out.println("la regle a declancher est: "+RegleChoisi.toString());
+                if(this.withInterface){
+                this.NotifyUser("la regle a declancher est: "+RegleChoisi.getNum()+"\r\n"); }
                 declancherRegle(RegleChoisi);
             }
         }else 
@@ -285,21 +305,27 @@ public class ChainageAvant {
                 if(checkBut())
                 {      System.out.println("Here");
                     System.out.println("le but "+BUT.toString()+" appartient a la base des faits");
+                    if(this.withInterface){
+                    this.NotifyUser("Le But Appartient a La Base des Fait\r\n");}
                     butAtteind=true;
                     
                 }
                 reglesDeclanchables=filtrage(BR);
-                if(!baseSature)
+                 if(!baseSature && !checkBut())
                 {
                     RegleChoisi=choixRegle(reglesDeclanchables,methode);
              
-                        System.out.println("la regle a declancher est: "+RegleChoisi.getNum());
-                       declancherRegle(RegleChoisi);
+                        //System.out.println("la regle a declancher est: "+RegleChoisi.getNum());
+                        if(this.withInterface){
+                        this.NotifyUser("La Regle Choisie Est : "+RegleChoisi.getNum()+" \r\n"); }
+                        declancherRegle(RegleChoisi);
                        
                        
                        if(checkBut())
                        {
                            System.out.println("le but est atteind");
+                          if(this.withInterface){
+                           this.NotifyUser("But Atteint"); }
                            butAtteind=true;
                        }
                 }

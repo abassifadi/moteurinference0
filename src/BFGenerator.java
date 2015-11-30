@@ -79,6 +79,7 @@ public class BFGenerator {
 	public  void readFromFile(String s) {
 		
 		try {
+			System.out.println("File Path : "+s);
 			InputStream ips=new FileInputStream(s);
 			InputStreamReader ipsr=new InputStreamReader(ips);
 			BufferedReader br=new BufferedReader(ipsr);
@@ -93,9 +94,14 @@ public class BFGenerator {
 			boolean isButPremisse = false ;
 			Vector<entite> premisse = new Vector<entite>() ;
 			Vector<entite> but = new Vector<entite>() ;
+		
+			
 			while ((ligne=br.readLine())!=null){
 				
+				System.out.println("Ligne is : "+ligne+"3");
+				//System.out.println("Result Is : "+ ligne.equals("REGLE"));
 				if(ligne.equalsIgnoreCase("REGLE")) {
+					//System.out.println("Working");
 					isButGen = false ;
 					isregle = true ;
 					isfait = false ; 
@@ -121,13 +127,14 @@ public class BFGenerator {
 					
 					if(isregle) {
 						
-						//System.out.println("Reading Regle");
+
 						isPremisse = true ;
 						isBut = false ;
 					Vector<entite> premisses = new Vector<entite>(); 
 					Vector<entite> buts = new Vector<entite>();
 					String[] str = ligne.split(" ");
 					String numString = str[0] ;
+					System.out.println("Rule Number Is "+str[0]);
 					int numRegle = Integer.parseInt(numString);
 					for(int i = 1; i< str.length ; i++) {
 				     if(str[i].equalsIgnoreCase("Not")) {
